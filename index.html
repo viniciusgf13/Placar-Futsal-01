@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/fifa-card.css">
 </head>
 <body class="min-h-screen">
     <div class="container mx-auto p-4 max-w-7xl">
@@ -193,6 +194,34 @@
         </div>
     </div>
 
+    <div class="fifa-card icon-card fifa-card-hidden" id="playerCard">
+        <div class="card-header">
+            <span class="card-rating" id="cardRating">96</span>
+            <span class="card-pos" id="cardPos">AT</span>
+        </div>
+        <div class="card-image">
+            <img id="cardImage" src="" alt="Melhor Jogador">
+        </div>
+        <div class="card-info">
+            <span class="card-nation" id="cardNation"></span>
+            <span class="card-club" id="cardClub"></span>
+            <h2 class="card-name" id="cardName"></h2>
+        </div>
+        <div class="card-stats">
+            <div class="stat-item"><span class="stat-value" data-stat="rit"></span> <span class="stat-label">Rit.</span></div>
+            <div class="stat-item"><span class="stat-value" data-stat="fin"></span> <span class="stat-label">Fin.</span></div>
+            <div class="stat-item"><span class="stat-value" data-stat="pas"></span> <span class="stat-label">Pas.</span></div>
+            <div class="stat-item"><span class="stat-value" data-stat="drib"></span> <span class="stat-label">Drib.</span></div>
+            <div class="stat-item"><span class="stat-value" data-stat="def"></span> <span class="stat-label">Def.</span></div>
+            <div class="stat-item"><span class="stat-value" data-stat="fis"></span> <span class="stat-label">Fís.</span></div>
+        </div>
+    </div>
+    
+    <button id="updateButton" onclick="updatePlayerCard(falcao)">Testar Falcão</button>
+    <button id="updateButton2" onclick="updatePlayerCard(ferrao)">Testar Ferrão</button>
+
+
     <script src="assets/js/app.js"></script>
+    <script src="assets/js/fifa-card.js"></script>
 </body>
 </html>

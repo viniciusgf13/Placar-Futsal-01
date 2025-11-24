@@ -1,0 +1,175 @@
+/* Importa a fonte */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+
+/* --- Estilo Base do Card --- */
+
+.fifa-card {
+    width: 280px;
+    height: 400px;
+    background-color: #383838;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    padding: 15px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    transform: rotateX(5deg) rotateY(-5deg) rotateZ(0deg);
+    transition: transform 0.5s ease;
+}
+
+.fifa-card-hidden {
+    display: none;
+}
+
+.fifa-card:hover {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+}
+
+/* --- Estilo do Card ICON (Lenda) --- */
+
+.icon-card {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 20%, #B8860B 100%);
+    color: #1a1a1a;
+    border: 3px solid #f0e68c;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Adiciona a forma estilizada de fundo */
+.icon-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    /* Conteúdo do SVG... */
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%232c2c2c" d="M0 0h100v100H0z"/><path fill="%232c2c2c" d="M0 0h100v100H0z"/><path fill="%23FFD700" d="M20 0l-5 5h-10v80h10v5h80v-80h-80z"/></svg>') repeat;
+    background-size: 200px 200px;
+    opacity: 0.1;
+    transform: rotate(45deg);
+    z-index: 1;
+}
+
+/* --- Header (Rating e Posição) --- */
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    z-index: 2;
+    position: relative;
+}
+
+.card-rating {
+    font-size: 2.5em;
+    font-weight: 900;
+    line-height: 1;
+    color: #1a1a1a;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+.card-pos {
+    font-size: 1.5em;
+    font-weight: 700;
+    background-color: rgba(255, 255, 255, 0.4);
+    padding: 5px 8px;
+    border-radius: 5px;
+    color: #1a1a1a;
+}
+
+/* --- Imagem do Jogador --- */
+
+.card-image {
+    width: 100%;
+    height: 150px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: translateY(-10px);
+    filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.5));
+}
+
+/* --- Info (Nação, Clube, Nome) --- */
+
+.card-info {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    z-index: 2;
+    position: relative;
+}
+
+.card-nation, .card-club {
+    display: block;
+    font-size: 0.8em;
+    font-weight: 700;
+    margin-bottom: 3px;
+    color: #333;
+}
+
+.card-name {
+    font-size: 1.8em;
+    font-weight: 900;
+    margin: 0;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    text-shadow: 1px 1px 0 #fff;
+}
+
+/* --- Estatísticas --- */
+
+.card-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    z-index: 2;
+    position: relative;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.stat-value {
+    font-size: 1.4em;
+    font-weight: 900;
+    margin-right: 5px;
+    color: #1a1a1a;
+}
+
+.stat-label {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Estilo dos Botões de Teste */
+#updateButton, #updateButton2 {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #0a8d0a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+#updateButton:hover, #updateButton2:hover {
+    background-color: #0a6d0a;
+}
