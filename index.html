@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ Futsal Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto p-4 max-w-7xl">
+        <!-- Header com botão de tema -->
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex-1 text-center">
+                <img src="https://i.imgur.com/7EHC1xB.png" alt="Futsal Manager" class="h-32 sm:h-40 md:h-52 mx-auto">
+            </div>
+            <button class="btn-theme ml-2" onclick="toggleTheme()">
+                <span id="themeIcon">🌙</span>
+            </button>
+        </div>
+
+        <div class="card mb-4">
+            <div class="flex overflow-x-auto" id="tabs">
+                <div class="tab active" onclick="showTab('partida', event)">🏆 Partida</div>
+                <div class="tab" onclick="showTab('sorteador', event)">🎲 Sorteador</div>
+                <div class="tab" onclick="showTab('times', event)">👥 Times</div>
+                <div class="tab" onclick="showTab('ranking', event)">📊 Rankings</div>
+                <div class="tab" onclick="showTab('historico', event)">📜 Histórico</div>
+            </div>
+        </div>
+
+        <div id="tab-partida" class="tab-content">
+            <div class="card p-5 mb-4">
+                <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    ⚙️ Configurar Partida
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="config-label">
+                            🏠 Time da Casa
+                        </label>
+                        <select id="selectHome" class="config-select w-full">
+                            <option value="">Selecione o time...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="config-label">
+                            ✈️ Time Visitante
+                        </label>
+                        <select id="selectAway" class="config-select w-full">
+                            <option value="">Selecione o time...</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 flex-wrap justify-center">
+                    <button class="timer-btn timer-btn-start" onclick="startMatch()">
+                        <span>▶</span> Iniciar
+                    </button>
+                    <button class="timer-btn timer-btn-pause" onclick="pauseMatch()">
+                        <span>⏸</span> Pausar
+                    </button>
+                    <button class="timer-btn timer-btn-resume" onclick="resumeMatch()">
+                        <span>▶</span> Retomar
+                    </button>
+                    <button class="timer-btn timer-btn-reset" onclick="resetTimer()">
+                        <span>🔄</span> Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="scoreboard mb-4" id="scoreboard">
+                <div class="text-center mb-4">
+                    <div class="text-6xl font-bold mb-2">
+                        <span id="scoreHome">0</span> - <span id="scoreAway">0</span>
+                    </div>
+                    <div class="text-2xl font-semibold mb-1">
+                        ⏱️ <span id="timerDisplay">10:00</span>
+                    </div>
+                    <div class="text-sm opacity-80" id="matchStatus">Aguardando início</div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                        <div class="text-sm opacity-80">Casa</div>
+                        <div class="text-xl font-bold" id="homeTeamName">-</div>
+                    </div>
+                    <div>
+                        <div class="text-sm opacity-80">Visitante</div>
+                        <div class="text-xl font-bold" id="awayTeamName">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-4 mb-4">
+                <h3 class="font-bold text-center mb-4 text-lg">⚽ Registrar Gol</h3>
+                
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <button id="btnSelectHome" class="goal-team-btn border-4 border-green-600 bg-green-50 p-4 rounded-lg font-bold transition-all" onclick="selectGoalTeam('home')">
+                        🏠<br><span class="text-sm" id="goalBtnHomeName">Casa</span>
+                    </button>
+                    <button id="btnSelectAway" class="goal-team-btn border-2 border-gray-300 bg-white p-4 rounded-lg font-bold transition-all" onclick="selectGoalTeam('away')">
+                        ✈️<br><span class="text-sm" id="goalBtnAwayName">Visitante</span>
+                    </button>
+                </div>
+                
+                <div id="goalPlayersList" class="space-y-2 mb-3">
+                    <p class="text-gray-400 text-sm text-center">Selecione o time acima</p>
+                </div>
+                
+                <div id="assistSection" class="hidden mb-3">
+                    <label class="block text-sm font-semibold mb-2 text-center">🎯 Assistência (opcional)</label>
+                    <div id="assistPlayersList" class="space-y-2"></div>
+                </div>
+                
+                <button id="btnConfirmGoal" class="btn-primary w-full text-lg py-3 hidden" onclick="confirmGoal()">
+                    ⚽ CONFIRMAR GOL!
+                </button>
+            </div>
+
+            <div class="card p-4 mb-4">
+                <h3 class="font-bold mb-3">📋 Eventos da Partida</h3>
+                <div id="eventsList" class="space-y-2 max-h-60 overflow-y-auto" style="padding: 12px; border-radius: 8px;">
+                    <p class="text-gray-500 text-sm">Nenhum evento registrado</p>
+                </div>
+            </div>
+
+            <div class="card p-4 mb-4">
+                <h3 class="font-bold mb-3">⚙️ Controles Rápidos</h3>
+                <div class="flex gap-2 mb-3">
+                    <button class="btn-secondary flex-1" onclick="adjustTime(-60)">-1 min</button>
+                    <button class="btn-secondary flex-1" onclick="adjustTime(60)">+1 min</button>
+                    <button class="btn-secondary flex-1" onclick="endTime()">⏱️ Fim</button>
+                </div>
+                <button class="btn-danger w-full" onclick="endMatch()">🏁 Terminar Partida</button>
+            </div>
+        </div>
+
+        
+        <div id="tab-sorteador" class="tab-content hidden">
+            <div class="card p-4 mb-4">
+                <h2 class="text-lg font-bold mb-4">🎲 Sorteador de Times</h2>
+                <p class="text-sm mb-3">Cole os nomes (um por linha) ou separe por vírgula. Máximo por time: <strong>5</strong> jogadores.</p>
+                <textarea id="sorteadorInput" class="input-field mb-3" rows="6" placeholder="Ex: João&#10;Maria&#10;Carlos"></textarea>
+                <div class="flex gap-2 mb-3">
+                    <button class="btn-primary" onclick="sortearTimes()">🎯 Sortear Times</button>
+                    <button class="btn-secondary" onclick="clearSorteador()">🧹 Limpar</button>
+                </div>
+                <div id="sorteadorResult" class="space-y-3"></div>
+                <div class="text-xs mt-3 text-gray-500">Ao sortear, TODOS os times existentes serão substituídos pelos times sorteados (Opção A).</div>
+            </div>
+        </div>
+<div id="tab-times" class="tab-content hidden">
+            <div class="card p-4 mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-lg font-bold">👥 Times (<span id="teamCount">0</span>/5)</h2>
+                    <button class="btn-primary" onclick="addTeam()">➕ Novo Time</button>
+                </div>
+                <div id="teamsList" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <div id="tab-ranking" class="tab-content hidden">
+            <div class="card p-4 mb-4">
+                <h2 class="ranking-header">🏆 Artilheiros</h2>
+                <div id="artilheirosList" class="space-y-2"></div>
+            </div>
+            <div class="card p-4 mb-4">
+                <h2 class="ranking-header">🧤 Melhores Goleiros</h2>
+                <div id="goleirosList" class="space-y-2 mb-4"></div>
+                <div class="space-y-2">
+                    <h3 class="font-bold text-base mb-3">🏅 Votação - Melhor Defesa</h3>
+                    <select id="selectBestDefense" class="w-full mb-2">
+                        <option value="">Selecione o goleiro com melhor defesa</option>
+                    </select>
+                    <button class="btn-primary w-full" onclick="voteBestDefense()">🏆 Registrar Voto</button>
+                    <div id="bestDefenseResult" class="mt-3 p-3 rounded" style="background: var(--bg-secondary); display: none;">
+                        <p class="font-bold">🏆 Melhor Defesa:</p>
+                        <p id="bestDefenseText"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-historico" class="tab-content hidden">
+            <div class="card p-4 mb-4">
+                <div class="flex gap-2 mb-4 flex-wrap">
+                    <button class="btn-secondary" onclick="exportHistory()">📤 Exportar (Historico)</button>
+                    <button class="btn-danger" onclick="clearHistory()">🗑️ Limpar</button>
+                </div>
+                <div id="historyList" class="space-y-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
